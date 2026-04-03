@@ -14,18 +14,21 @@ public class LoginPage extends BasePage {
 
     // Actions
     public LoginPage enterUsername(String username) {
+        logger.info("------Starting enterUsername()------");
         WaitUtils.waitForElementVisible(usernameField);
         type(usernameField, username);
         return this;
     }
 
     public LoginPage enterPassword(String password) {
+        logger.info("------Starting enterPassword()------");
         WaitUtils.waitForElementVisible(passwordField);
         type(passwordField, password);
         return this;
     }
 
     public DashboardPage clickLogin() {
+        logger.info("------Starting clickLogin()------");
         WaitUtils.waitForElementClickable(loginBtn);
         click(loginBtn);
         return new DashboardPage();
@@ -33,6 +36,7 @@ public class LoginPage extends BasePage {
 
     // Combined action (optional but useful)
     public DashboardPage login(String username, String password) {
+        logger.info("------Starting login()------");
         return enterUsername(username)
                 .enterPassword(password)
                 .clickLogin();

@@ -13,17 +13,20 @@ public class DashboardPage extends BasePage {
 
     // Actions
     public String getWelcomeMessage() {
+        logger.info("------Starting getWelcomeMessage()------");
         WaitUtils.waitForElementVisible(welcomeText);
         return getText(welcomeText);
     }
 
     public LoginPage clickLogout() {
+        logger.info("------Starting clickLogout()------");
         WaitUtils.waitForElementClickable(logoutBtn);
         click(logoutBtn);
         return new LoginPage();
     }
 
     public boolean isDashboardLoaded() {
+        logger.info("------Starting isDashboardLoaded()------");
         return isDisplayed(welcomeText);
     }
 }
