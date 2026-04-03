@@ -17,11 +17,12 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         ExtentReportManager.createTest(result.getMethod().getMethodName());
+        ExtentReportManager.getTest().info("Test started: " + result.getMethod().getMethodName());
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        ExtentReportManager.getTest().pass("Test Passed");
+        ExtentReportManager.getTest().pass("Test Passed: " + result.getMethod().getMethodName());
     }
 
     @Override
@@ -35,7 +36,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        ExtentReportManager.getTest().skip("Test Skipped");
+        ExtentReportManager.getTest().skip("Test Skipped: " + result.getMethod().getMethodName());
     }
 
     @Override

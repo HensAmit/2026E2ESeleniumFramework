@@ -1,5 +1,6 @@
 package com.tests.pages;
 
+import com.framework.reports.ExtentLogger;
 import org.openqa.selenium.By;
 
 import com.framework.base.BasePage;
@@ -14,12 +15,14 @@ public class DashboardPage extends BasePage {
     // Actions
     public String getWelcomeMessage() {
         logger.info("------Starting getWelcomeMessage()------");
+        ExtentLogger.info("------Starting getWelcomeMessage()------");
         WaitUtils.waitForElementVisible(welcomeText);
         return getText(welcomeText);
     }
 
     public LoginPage clickLogout() {
         logger.info("------Starting clickLogout()------");
+        ExtentLogger.info("------Starting clickLogout()------");
         WaitUtils.waitForElementClickable(logoutBtn);
         click(logoutBtn);
         return new LoginPage();
@@ -27,6 +30,7 @@ public class DashboardPage extends BasePage {
 
     public boolean isDashboardLoaded() {
         logger.info("------Starting isDashboardLoaded()------");
+        ExtentLogger.info("------Starting isDashboardLoaded()------");
         return isDisplayed(welcomeText);
     }
 }
