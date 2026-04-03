@@ -1,35 +1,63 @@
 package com.framework.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public final class DataUtils {
 
-    private static final Map<String, XSSFSheet> sheetCache = new HashMap<>();
+    private static final String EXCEL_FILE_PATH = "testdata/TestData.xlsx";
 
-    private DataUtils() {}
+    private DataUtils() {
+    }
 
-    public static String getData(String filePath, String sheetName, int row, int col) {
-
-        try {
-            XSSFSheet sheet = sheetCache.get(sheetName);
-
-            if (sheet == null) {
-                FileInputStream fis = new FileInputStream(filePath);
-                XSSFWorkbook workbook = new XSSFWorkbook(fis);
-                sheet = workbook.getSheet(sheetName);
-                sheetCache.put(sheetName, sheet);
+    public static void readTestDataFromExcelSheet(String testCaseId, String sheetName) {
+        try (InputStream inputStream = ResourceLoader.getResourceAsStream(EXCEL_FILE_PATH)) {
+            assert inputStream != null;
+            try (Workbook workbook = new XSSFWorkbook(inputStream)) {
+                Sheet sheet = workbook.getSheet(sheetName);
+                if (sheet == null) {
+                    throw new RuntimeException("Sheet " + sheetName + " not found in Excel file.");
+                }
+                // Step 1: Read the header row and map headers to column indices
+                Row headerRow = sheet.getRow(0);
+                if (headerRow == null) {
+                    throw new RuntimeException("Sheet " + sheetName + " has no header row.");
+                }
+                Map<String, Integer> headerMap = new HashMap<>();
+                for (Cell cell : headerRow) {
+                    headerMap.put(cell.getStringCellValue().trim(), cell.getColumnIndex());
+                }
+                // Step 2: Find the row matching the given testCaseId
+                Iterator<Row> rowIterator = sheet.iterator();
+                rowIterator.next(); // Skip header row
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    Cell testCaseIdCell = row.getCell(headerMap.get("TC_ID"));
+                    if (testCaseIdCell != null && testCaseIdCell.getStringCellValue().equalsIgnoreCase(testCaseId)) {
+                        // Step 3: Populate ScenarioData dynamically based on column names
+                        for (Map.Entry<String, Integer> entry : headerMap.entrySet()) {
+                            String columnName = entry.getKey();
+                            int columnIndex = entry.getValue();
+                            Cell cell = row.getCell(columnIndex);
+                            if (cell != null) {
+                                String cellValue = cell.getStringCellValue();
+                                ScenarioData.setData(columnName, cellValue);
+                            }
+                        }
+                        break; // Exit loop once the desired row is found
+                    }
+                }
             }
-
-            return sheet.getRow(row).getCell(col).getStringCellValue();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading Excel file", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error reading data from Excel file: ", e);
         }
     }
 }
