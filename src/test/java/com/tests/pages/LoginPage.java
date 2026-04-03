@@ -8,9 +8,9 @@ import com.framework.utils.WaitUtils;
 public class LoginPage extends BasePage {
 
     // Locators
-    private final By usernameField = By.id("username");
+    private final By usernameField = By.id("user-name");
     private final By passwordField = By.id("password");
-    private final By loginBtn = By.id("loginBtn");
+    private final By loginBtn = By.id("login-button");
 
     // Actions
     public LoginPage enterUsername(String username) {

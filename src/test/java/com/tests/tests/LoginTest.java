@@ -1,5 +1,6 @@
 package com.tests.tests;
 
+import com.framework.config.ConfigManager;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -12,7 +13,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void verifyLogin() {
         LoginImpl login = new LoginImpl();
-        DashboardPage dashboard = login.loginToApplication("qa_user", "qa_pass");
+        DashboardPage dashboard = login.loginToApplication(ConfigManager.get("username"), ConfigManager.get("password"));
         Assert.assertTrue(dashboard.isDashboardLoaded(), "Dashboard not loaded");
     }
 }

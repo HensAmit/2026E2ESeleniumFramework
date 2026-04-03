@@ -1,5 +1,6 @@
 package com.tests.tests;
 
+import com.framework.config.ConfigManager;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -12,9 +13,9 @@ public class DashboardTest extends BaseTest {
     @Test
     public void verifyWelcomeMessage() {
         LoginImpl login = new LoginImpl();
-        login.loginToApplication("qa_user", "qa_pass");
+        login.loginToApplication(ConfigManager.get("username"), ConfigManager.get("password"));
         DashboardImpl dashboard = new DashboardImpl();
         String message = dashboard.fetchWelcomeMessage();
-        Assert.assertTrue(message.contains("Welcome"), "Invalid welcome message");
+        Assert.assertTrue(message.contains("Swag Labs"), "Invalid welcome message");
     }
 }

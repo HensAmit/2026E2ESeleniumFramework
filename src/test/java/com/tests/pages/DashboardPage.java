@@ -8,7 +8,7 @@ import com.framework.utils.WaitUtils;
 public class DashboardPage extends BasePage {
 
     // Locators
-    private final By welcomeText = By.id("welcome");
+    private final By welcomeText = By.xpath("//div[text()='Swag Labs']");
     private final By logoutBtn = By.id("logout");
 
     // Actions
